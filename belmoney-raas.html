@@ -1,0 +1,463 @@
+<title>Belmoney RaaS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;600;700&family=Roboto:wght@400;500&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* Layout: alternating flat bands (teal hero / off-white body), 1200px column, 16px radius, no shadows */
+:root {
+  --bm-lime: #CCFF03;
+  --bm-teal: #00403D;
+  --bm-off: #EDF6F8;
+  --bg: #EDF6F8;
+  --fg: #00403D;
+  --muted: rgba(0,64,61,.72);
+  --surface: #FFFFFF;
+  --line: rgba(0,64,61,.15);
+  --band: #00403D;
+  --band-fg: #EDF6F8;
+  --band-muted: rgba(237,246,248,.75);
+  --band-line: rgba(237,246,248,.18);
+  --band-surface: #053937;
+  --radius: 16px;
+  --f-title: 'League Spartan', 'Helvetica Neue', Arial, sans-serif;
+  --f-body: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --f-mono: 'Roboto Mono', ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #012725; --fg: #EDF6F8; --muted: rgba(237,246,248,.72);
+    --surface: #053937; --line: rgba(237,246,248,.16);
+    --band: #00403D; --band-surface: #01302E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #012725; --fg: #EDF6F8; --muted: rgba(237,246,248,.72);
+  --surface: #053937; --line: rgba(237,246,248,.16);
+  --band: #00403D; --band-surface: #01302E;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-weight: 400; font-size: 16px; line-height: 1.6; }
+.bm { padding-inline: 16px; padding-block: 16px 48px; }
+.wrap { max-width: 1200px; margin: 0 auto; display: grid; gap: 24px; }
+h1, h2, h3, h4 { font-family: var(--f-title); font-weight: 700; line-height: 1.1; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(36px, 7vw, 64px); text-transform: uppercase; letter-spacing: -.01em; }
+h2 { font-size: clamp(26px, 4vw, 32px); }
+h3 { font-size: 20px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font-family: var(--f-body); font-weight: 500; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.badge { display: inline-block; background: var(--bm-lime); color: var(--bm-teal); font-family: var(--f-title); font-weight: 600; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; border-radius: 16px; padding: 4px 12px; }
+.num { font-variant-numeric: tabular-nums; }
+section { border-radius: var(--radius); padding: clamp(24px, 4vw, 48px); display: grid; gap: 24px; }
+section.light { background: var(--surface); border: 1px solid var(--line); }
+section.dark { background: var(--band); color: var(--band-fg); position: relative; overflow: hidden; }
+section.dark .eyebrow { color: var(--band-muted); }
+section.dark p { color: var(--band-fg); }
+.head { display: grid; gap: 8px; }
+.lead { font-size: 18px; color: var(--muted); }
+section.dark .lead { color: var(--band-muted); }
+
+/* hero */
+.hero { gap: 32px; }
+.hero .bgicon { position: absolute; width: 70%; right: -18%; top: -20%; pointer-events: none; }
+.hero > * { position: relative; z-index: 2; }
+.logo { width: 180px; height: auto; display: block; }
+.hero h1 { color: var(--bm-lime); }
+.hero h1 span { color: var(--band-fg); display: block; font-size: .5em; letter-spacing: .02em; margin-top: 8px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; }
+.stat { border-top: 2px solid var(--bm-lime); padding-top: 12px; display: grid; gap: 4px; }
+.stat b { font-family: var(--f-title); font-weight: 700; font-size: 36px; line-height: 1; color: var(--band-fg); }
+.stat span { font-size: 14px; color: var(--band-muted); }
+
+/* split */
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.box { border-radius: var(--radius); padding: 24px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.box.you { border: 2px solid var(--fg); }
+.box.us { background: var(--bm-lime); color: var(--bm-teal); }
+.box.us .eyebrow { color: rgba(0,64,61,.75); }
+.box ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+
+/* flow */
+.flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+.step { background: var(--band-surface); border: 1px solid var(--band-line); border-radius: var(--radius); padding: 16px; display: grid; gap: 6px; align-content: start; position: relative; min-width: 0; }
+.step.core { background: var(--bm-lime); color: var(--bm-teal); border-color: var(--bm-lime); }
+.step.core .eyebrow { color: rgba(0,64,61,.75); }
+.step h3 { font-size: 18px; }
+.step p { font-size: 14px; }
+.step.core p { color: var(--bm-teal); }
+.step:not(:last-child)::after { content: ""; position: absolute; right: -10px; top: 50%; width: 8px; height: 8px; border-radius: 50%; background: var(--bm-lime); transform: translateY(-50%); z-index: 3; }
+@media (max-width: 860px) {
+  .flow { grid-template-columns: 1fr; }
+  .step:not(:last-child)::after { right: auto; left: 24px; top: auto; bottom: -10px; transform: none; }
+}
+
+/* api */
+.api { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.calls { display: flex; flex-wrap: wrap; gap: 8px; }
+.calls code { font-family: var(--f-mono); font-size: 13px; border: 1px solid var(--line); border-radius: 16px; padding: 4px 12px; }
+
+/* timeline */
+.timeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .timeline { grid-template-columns: 1fr; } }
+.ms { border-top: 4px solid var(--fg); padding-top: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.ms.last { border-top-color: var(--bm-lime); }
+.ms .when { font-family: var(--f-title); font-weight: 600; font-size: 14px; }
+.ms ul { margin: 0; padding-left: 18px; font-size: 14px; color: var(--muted); display: grid; gap: 4px; }
+.ms .owner { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* tables */
+.tbl { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; min-width: 560px; }
+th { background: var(--bm-teal); color: var(--bm-off); font-family: var(--f-title); font-weight: 600; text-align: left; padding: 12px 16px; font-size: 14px; }
+td { padding: 12px 16px; border-top: 1px solid var(--line); }
+tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--bg) 60%, transparent); }
+td.r, th.r { text-align: right; }
+tr.hl td { background: var(--bm-lime) !important; color: var(--bm-teal); font-weight: 500; }
+
+/* fees */
+.fees { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.fee { border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: grid; gap: 4px; align-content: start; }
+.fee b { font-family: var(--f-title); font-weight: 700; font-size: 28px; line-height: 1.1; }
+.fee span { font-size: 14px; color: var(--muted); }
+
+/* calculator */
+.calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 24px; }
+@media (max-width: 860px) { .calc { grid-template-columns: 1fr; } }
+.inputs { display: grid; gap: 16px; align-content: start; }
+label { font-family: var(--f-title); font-weight: 600; font-size: 14px; display: grid; gap: 6px; }
+input, select { font: inherit; font-family: var(--f-body); font-size: 16px; color: var(--band-fg); background: var(--band-surface); border: 1px solid var(--band-line); border-radius: var(--radius); padding: 10px 14px; width: 100%; box-sizing: border-box; }
+input:focus-visible, select:focus-visible { outline: 2px solid var(--bm-lime); outline-offset: 2px; }
+.seg { display: flex; gap: 8px; flex-wrap: wrap; }
+.seg button { font-family: var(--f-title); font-weight: 600; font-size: 14px; border-radius: 16px; padding: 8px 16px; border: 2px solid var(--band-fg); background: transparent; color: var(--band-fg); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--bm-lime); border-color: var(--bm-lime); color: var(--bm-teal); }
+.seg button:focus-visible { outline: 2px solid var(--bm-lime); outline-offset: 2px; }
+.out { background: var(--band-surface); border-radius: var(--radius); padding: 20px; display: grid; gap: 8px; min-width: 0; }
+.line { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; border-bottom: 1px solid var(--band-line); padding-bottom: 6px; }
+.line span:first-child { color: var(--band-muted); }
+.line span:last-child { font-variant-numeric: tabular-nums; }
+.total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 8px; flex-wrap: wrap; }
+.total b { font-family: var(--f-title); font-weight: 700; font-size: 40px; color: var(--bm-lime); font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--muted); }
+section.dark .note { color: var(--band-muted); }
+
+/* corridors */
+.tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.tier { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 6px; align-content: start; }
+.tier .t { display: flex; justify-content: space-between; align-items: baseline; }
+.tier .t b { font-family: var(--f-title); font-size: 22px; }
+.tier .t span { font-family: var(--f-title); font-weight: 600; font-size: 28px; }
+.tier p { font-size: 13px; color: var(--muted); }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.blocked { border: 2px dashed var(--fg); border-radius: var(--radius); padding: 16px 20px; font-size: 14px; }
+
+/* team */
+.team { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.person { border-top: 2px solid var(--bm-lime); padding-top: 12px; display: grid; gap: 2px; }
+.person b { font-family: var(--f-title); font-weight: 600; font-size: 18px; }
+.person .role { font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--band-muted); }
+.person p { font-size: 14px; color: var(--band-muted); }
+
+.cta { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+.cta p { font-family: var(--f-title); font-weight: 600; font-size: 22px; color: var(--bm-teal); max-width: 40ch; }
+.cta-band { background: var(--bm-lime); color: var(--bm-teal); }
+.btn { font-family: var(--f-title); font-weight: 600; background: var(--bm-teal); color: var(--bm-off); border-radius: 16px; padding: 12px 24px; text-decoration: none; display: inline-block; }
+@media (prefers-reduced-motion: no-preference) { .seg button, .btn { transition: background .15s, color .15s; } }
+</style>
+
+<div class="bm">
+<div class="wrap">
+
+<!-- HERO -->
+<section class="dark hero" aria-labelledby="hero-title">
+  <svg class="bgicon" viewBox="0 0 700 715" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M699.981 183.779C699.981 251.04 611.269 310.667 474.565 347.694C448.778 354.672 421.287 360.856 392.356 366.141C366.39 370.875 339.274 374.879 311.185 378.078C259.376 384 204.292 387.18 147.206 387.18C119.285 387.18 91.8411 386.423 65.0243 384.944C46.9188 383.953 29.1128 382.634 11.6248 381.015C0.696009 380.005 -3.95452 366.609 3.97075 359.013L54.0021 311.07L148.881 220.151C151.809 217.344 155.852 216.128 159.847 216.811C188.928 221.741 220.798 224.463 254.22 224.463C390.99 224.463 501.878 178.915 501.878 122.758C501.878 83.842 448.675 50.0432 370.526 32.9427C361.394 30.9407 358.091 19.6776 364.837 13.2134L375.242 3.24121C377.918 0.678002 381.68 -0.463282 385.329 0.172843C476.596 16.2257 554.014 41.2216 609.22 72.0644C666.596 104.133 699.972 142.515 699.972 183.779H699.981Z" fill="#053937"/>
+<path d="M699.982 511.599C699.982 623.94 452.492 715 147.206 715C102.592 715 59.2139 713.054 17.6694 709.378C6.92768 708.424 2.12777 695.411 9.65069 687.684L145.887 547.811C148.844 544.78 153.063 543.443 157.237 544.172C187.019 549.392 219.806 552.273 254.239 552.273C391.008 552.273 501.897 506.725 501.897 450.568C501.897 415.394 458.425 384.402 392.374 366.132C421.306 360.847 448.806 354.672 474.584 347.684C611.288 384.692 700 444.329 700 511.589L699.982 511.599Z" fill="#053937"/>
+  </svg>
+  <svg class="logo" width="100%" height="auto" viewBox="0 0 1540 258" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Belmoney">
+<path d="M1539.08 63.4768L1457.93 255.087C1457.39 256.357 1456.15 257.177 1454.77 257.177H1420.61C1418.17 257.177 1416.51 254.697 1417.44 252.447L1440.66 195.867L1380.12 63.5668C1379.08 61.2968 1380.74 58.7068 1383.24 58.7068H1419.22C1420.54 58.7068 1421.75 59.4668 1422.32 60.6568L1462.11 144.127L1496.45 60.8268C1496.98 59.5468 1498.23 58.7068 1499.62 58.7068H1535.93C1538.39 58.7068 1540.05 61.2168 1539.09 63.4768H1539.08Z" fill="#EDF8F6"/>
+<path d="M509.612 145.967C510.632 151.687 512.412 156.637 514.972 160.817C517.522 165.007 520.632 168.467 524.312 171.227C527.982 173.987 532.062 176.027 536.562 177.347C541.052 178.677 545.542 179.337 550.032 179.337C557.782 179.337 565.192 177.397 572.232 173.517C578.572 170.027 583.302 164.957 586.412 158.317C587.042 156.977 588.492 156.217 589.962 156.417L620.822 160.717C622.932 161.007 624.252 163.137 623.622 165.167C621.212 172.917 617.852 179.727 613.562 185.597C608.562 192.437 602.792 198.147 596.262 202.747C589.732 207.337 582.532 210.757 574.682 213.007C566.822 215.247 558.912 216.377 550.952 216.377C540.952 216.377 531.102 214.697 521.402 211.327C511.702 207.957 503.032 202.907 495.382 196.167C487.732 189.427 481.552 181.167 476.862 171.367C472.162 161.567 469.822 150.237 469.822 137.387C469.822 124.537 472.012 113.247 476.402 103.557C480.792 93.8669 486.602 85.6968 493.852 79.0668C501.092 72.4368 509.362 67.4368 518.652 64.0668C527.942 60.6968 537.372 59.0168 546.972 59.0168C556.572 59.0168 565.902 60.6968 574.982 64.0668C584.062 67.4368 592.232 72.4868 599.472 79.2268C606.712 85.9668 612.632 94.4868 617.232 104.787C621.822 115.097 624.322 127.287 624.732 141.377V142.537C624.732 144.427 623.192 145.967 621.302 145.967H509.612ZM582.172 116.877C579.112 109.327 574.412 103.667 568.092 99.8868C561.762 96.1168 555.022 94.2268 547.882 94.2268C540.742 94.2268 534.002 96.1168 527.672 99.8868C521.342 103.667 516.442 109.327 512.972 116.877H582.162H582.172Z" fill="#EDF8F6"/>
+<path d="M633.303 211.427V22.5668C633.303 20.6768 634.843 19.1368 636.733 19.1368H669.063C670.953 19.1368 672.493 20.6768 672.493 22.5668V211.427C672.493 213.317 670.953 214.857 669.063 214.857H636.733C634.843 214.857 633.303 213.317 633.303 211.427Z" fill="#EDF8F6"/>
+<path d="M876.093 131.577C876.093 118.107 873.283 108.107 867.673 101.577C862.053 95.0468 855.783 91.7769 848.843 91.7769C845.373 91.7769 841.953 92.5968 838.583 94.2268C835.213 95.8668 832.253 98.3568 829.703 101.727C827.153 105.097 825.053 109.277 823.423 114.277C821.783 119.277 820.973 125.047 820.973 131.577L821.853 211.387C821.873 213.297 820.333 214.857 818.423 214.857H786.133C784.243 214.857 782.703 213.317 782.703 211.427V131.577C782.703 118.107 779.893 108.107 774.283 101.577C768.663 95.0468 762.393 91.7769 755.453 91.7769C751.983 91.7769 748.563 92.5968 745.193 94.2268C741.823 95.8668 738.863 98.3568 736.313 101.727C733.753 105.097 731.663 109.277 730.033 114.277C728.393 119.277 727.583 125.047 727.583 131.577V211.427C727.583 213.317 726.043 214.857 724.153 214.857H691.823C689.933 214.857 688.393 213.317 688.393 211.427V70.6469C688.393 67.3869 706.763 59.9268 709.213 62.3768L725.443 79.2169C731.153 72.4769 737.733 67.3768 745.193 63.9068C752.643 60.4368 760.243 58.6968 768.003 58.6968C776.983 58.6968 785.503 61.0468 793.573 65.7368C801.633 70.4368 808.113 77.5768 813.013 87.1668C818.723 77.5768 825.923 70.4368 834.593 65.7368C843.263 61.0468 852.193 58.6968 861.383 58.6968C868.123 58.6968 874.703 60.0268 881.133 62.6768C887.563 65.3268 893.223 69.3668 898.123 74.7668C903.023 80.1768 907.003 86.9668 910.063 95.1268C913.123 103.297 914.653 112.887 914.653 123.907H914.343L915.223 211.377C915.243 213.287 913.703 214.837 911.793 214.837H879.493C877.603 214.837 876.063 213.297 876.063 211.407V131.557L876.093 131.577Z" fill="#EDF8F6"/>
+<path d="M457.293 103.257C453.203 93.3468 447.893 85.1368 441.363 78.6068C440.813 78.0568 440.273 77.5368 439.723 77.0168C435.593 73.1468 431.083 69.9068 426.213 67.2868C423.853 66.0168 421.403 64.8768 418.873 63.9068C410.403 60.6368 401.873 58.9969 393.303 58.9969C384.313 58.9969 375.693 60.6769 367.433 64.0569C359.163 67.4169 351.853 72.4768 345.543 79.2068V22.5569C345.543 20.6669 344.003 19.1268 342.113 19.1268H309.783C307.893 19.1268 306.353 20.6668 306.353 22.5569V211.487C306.353 214.757 324.723 222.197 327.163 219.757L340.503 205.927C341.593 204.797 343.313 204.527 344.663 205.327C345.313 205.707 345.973 206.087 346.643 206.447C349.133 207.837 351.723 209.097 354.423 210.247C364.013 214.337 374.223 216.387 385.043 216.387C395.863 216.387 406.023 214.337 415.503 210.247C418.273 209.057 420.943 207.747 423.513 206.287C427.143 204.237 430.573 201.927 433.813 199.347C436.123 197.517 438.333 195.537 440.453 193.417C443.803 190.067 446.823 186.477 449.483 182.607C452.533 178.237 455.123 173.507 457.303 168.467C461.373 158.987 463.423 148.827 463.423 138.007C463.423 124.737 461.373 113.147 457.303 103.257H457.293ZM421.163 154.687C419.113 159.897 416.313 164.377 412.743 168.157C409.163 171.927 404.983 174.937 400.183 177.187C397.833 178.297 395.413 179.117 392.923 179.677C390.353 180.267 387.733 180.547 385.023 180.547C379.513 180.547 374.353 179.427 369.553 177.187C364.753 174.937 360.573 171.927 357.013 168.157C353.433 164.367 350.633 159.887 348.593 154.687C346.543 149.477 345.533 143.917 345.533 138.007V137.697C345.533 131.777 346.603 126.217 348.743 121.017C350.893 115.807 353.743 111.327 357.313 107.547C360.883 103.777 365.023 100.767 369.723 98.5168C374.413 96.2768 379.523 95.1568 385.023 95.1568C390.523 95.1568 395.383 96.2768 400.173 98.5168C400.323 98.5868 400.483 98.6669 400.633 98.7469C405.243 100.977 409.273 103.957 412.723 107.707C416.293 111.587 419.093 116.127 421.143 121.327C423.183 126.537 424.203 132.097 424.203 138.007C424.203 143.917 423.183 149.487 421.143 154.687H421.163Z" fill="#EDF8F6"/>
+<path d="M999.472 59.0168C1010.29 59.0168 1020.44 61.0568 1029.93 65.1368C1039.42 69.2268 1047.74 74.7768 1054.88 81.8268C1062.02 88.8668 1067.63 97.1869 1071.72 106.777C1075.8 116.377 1077.84 126.577 1077.84 137.397C1077.84 148.217 1075.8 158.427 1071.72 168.017C1067.64 177.617 1062.02 185.977 1054.88 193.127C1047.73 200.277 1039.42 205.887 1029.93 209.967C1020.44 214.057 1010.28 216.087 999.472 216.087C988.662 216.087 978.442 214.047 968.852 209.967C959.252 205.887 950.892 200.277 943.742 193.127C936.592 185.987 930.982 177.617 926.902 168.017C922.822 158.427 920.782 148.217 920.782 137.397C920.782 126.577 922.822 116.377 926.902 106.777C930.982 97.1869 936.592 88.8668 943.742 81.8268C950.882 74.7868 959.252 69.2268 968.852 65.1368C978.442 61.0568 988.652 59.0168 999.472 59.0168ZM999.472 180.257C1004.78 180.257 1009.830 179.137 1014.63 176.887C1019.42 174.647 1023.61 171.577 1027.18 167.697C1030.75 163.827 1033.56 159.277 1035.6 154.077C1037.64 148.867 1038.66 143.317 1038.66 137.387C1038.66 131.457 1037.64 125.907 1035.6 120.697C1033.56 115.497 1030.75 110.957 1027.18 107.077C1023.61 103.197 1019.42 100.137 1014.63 97.8868C1009.83 95.6468 1004.78 94.5168 999.472 94.5168C994.162 94.5168 988.802 95.6368 984.012 97.8868C979.212 100.137 975.032 103.197 971.462 107.077C967.892 110.957 965.082 115.497 963.042 120.697C961.002 125.907 959.982 131.467 959.982 137.387C959.982 143.307 961.002 148.867 963.042 154.077C965.082 159.287 967.892 163.827 971.462 167.697C975.032 171.577 979.212 174.637 984.012 176.887C988.802 179.137 993.962 180.257 999.472 180.257Z" fill="#EDF8F6"/>
+<path d="M1192.06 131.577C1192.06 124.837 1191.09 118.977 1189.15 113.977C1187.21 108.977 1184.71 104.847 1181.65 101.577C1178.59 98.3168 1175.07 95.8668 1171.09 94.2268C1167.11 92.5968 1163.08 91.7769 1159 91.7769C1154.71 91.7769 1150.58 92.5968 1146.6 94.2268C1142.62 95.8668 1138.99 98.3568 1135.73 101.727C1132.46 105.097 1129.86 109.277 1127.92 114.277C1125.98 119.277 1125.01 125.047 1125.01 131.577V211.427C1125.01 213.317 1123.47 214.857 1121.58 214.857H1089.25C1087.36 214.857 1085.82 213.317 1085.82 211.427V70.6469C1085.82 67.3869 1104.19 59.9268 1106.64 62.3768L1123.17 79.5269C1129.5 72.5869 1136.79 67.3868 1145.06 63.9168C1153.33 60.4468 1161.85 58.7068 1170.62 58.7068C1178.17 58.7068 1185.57 60.0369 1192.82 62.6869C1200.06 65.3369 1206.49 69.3769 1212.11 74.7769C1217.72 80.1869 1222.21 86.9768 1225.58 95.1368C1228.95 103.307 1230.63 112.897 1230.63 123.917H1230.32L1231.2 211.387C1231.22 213.297 1229.68 214.847 1227.77 214.847H1195.48C1193.59 214.847 1192.05 213.307 1192.05 211.417V131.567L1192.06 131.577Z" fill="#EDF8F6"/>
+<path d="M1277.17 145.967C1278.19 151.687 1279.97 156.637 1282.53 160.817C1285.08 165.007 1288.19 168.467 1291.87 171.227C1295.54 173.987 1299.62 176.027 1304.12 177.347C1308.61 178.677 1313.1 179.337 1317.59 179.337C1325.34 179.337 1332.75 177.397 1339.79 173.517C1346.13 170.027 1350.86 164.957 1353.97 158.317C1354.6 156.977 1356.05 156.217 1357.52 156.417L1388.38 160.717C1390.49 161.007 1391.81 163.137 1391.18 165.167C1388.77 172.917 1385.41 179.727 1381.12 185.597C1376.12 192.437 1370.35 198.147 1363.82 202.747C1357.29 207.337 1350.09 210.757 1342.24 213.007C1334.38 215.247 1326.47 216.377 1318.51 216.377C1308.51 216.377 1298.66 214.697 1288.96 211.327C1279.26 207.957 1270.590 202.907 1262.94 196.167C1255.29 189.427 1249.11 181.167 1244.42 171.367C1239.72 161.567 1237.38 150.237 1237.38 137.387C1237.38 124.537 1239.57 113.247 1243.96 103.557C1248.35 93.8669 1254.16 85.6968 1261.41 79.0668C1268.65 72.4368 1276.92 67.4368 1286.21 64.0668C1295.5 60.6968 1304.93 59.0168 1314.53 59.0168C1324.13 59.0168 1333.46 60.6968 1342.54 64.0668C1351.62 67.4368 1359.79 72.4868 1367.03 79.2268C1374.27 85.9668 1380.19 94.4868 1384.79 104.787C1389.38 115.097 1391.88 127.287 1392.29 141.377V142.537C1392.29 144.427 1390.75 145.967 1388.86 145.967H1277.17ZM1349.73 116.877C1346.67 109.327 1341.97 103.667 1335.65 99.8868C1329.32 96.1168 1322.58 94.2268 1315.44 94.2268C1308.3 94.2268 1301.56 96.1168 1295.23 99.8868C1288.9 103.667 1284 109.327 1280.53 116.877H1349.72H1349.73Z" fill="#EDF8F6"/>
+<path d="M230.792 60.6168C230.792 82.7968 201.543 102.467 156.473 114.677C147.973 116.977 138.902 119.017 129.363 120.757C120.803 122.317 111.863 123.637 102.603 124.697C85.5225 126.647 67.3625 127.697 48.5325 127.697C39.3225 127.697 30.2725 127.447 21.4325 126.957C15.4625 126.627 9.5925 126.197 3.8325 125.657C0.232502 125.327 -1.3075 120.907 1.3125 118.397L17.8125 102.587L49.0925 72.6068C50.0525 71.6868 51.3925 71.2768 52.7125 71.5068C62.3025 73.1368 72.8125 74.0268 83.8325 74.0268C128.923 74.0268 165.482 59.0068 165.482 40.4868C165.482 27.6568 147.943 16.5068 122.173 10.8668C119.162 10.2068 118.073 6.48682 120.303 4.35682L123.733 1.06682C124.613 0.226823 125.853 -0.153186 127.062 0.0568137C157.152 5.34681 182.683 13.5968 200.883 23.7668C219.803 34.3468 230.803 46.9968 230.803 60.6068L230.792 60.6168Z" fill="#CCFF03"/>
+<path d="M230.793 168.717C230.793 205.767 149.193 235.797 48.5325 235.797C33.8225 235.797 19.5225 235.157 5.82253 233.947C2.28253 233.637 0.692532 229.337 3.18253 226.797L48.1025 180.667C49.0725 179.667 50.4725 179.227 51.8425 179.467C61.6625 181.187 72.4725 182.137 83.8225 182.137C128.913 182.137 165.473 167.117 165.473 148.597C165.473 136.997 151.143 126.777 129.363 120.757C138.903 119.017 147.963 116.977 156.473 114.677C201.543 126.887 230.793 146.547 230.793 168.727V168.717Z" fill="#CCFF03"/>
+  </svg>
+  <div class="head">
+    <span class="badge">Remittance-as-a-Service</span>
+    <h1 id="hero-title">Launch cross-border payments under our licence<span>Your brand. Your customers. Belmoney's regulated rails.</span></h1>
+  </div>
+  <p class="lead">Belmoney RaaS lets fintechs, platforms and money transfer operators offer international transfers without becoming a payment institution. You own the customer experience; Belmoney runs the regulated core: pay-in, compliance, FX and payout in over 100 countries.</p>
+  <div class="stats">
+    <div class="stat"><b class="num">100+</b><span>payout countries, multiple currencies</span></div>
+    <div class="stat"><b class="num">60 days</b><span>target from contract to go-live</span></div>
+    <div class="stat"><b>PSD2</b><span>payment institution supervised by the National Bank of Belgium</span></div>
+    <div class="stat"><b class="num">€0</b><span>markup on interchange and scheme fees (IC++)</span></div>
+  </div>
+</section>
+
+<!-- WHAT IT IS -->
+<section class="light" aria-labelledby="what">
+  <div class="head">
+    <span class="eyebrow">The model</span>
+    <h2 id="what">Who does what</h2>
+    <p class="lead">RaaS is a white-label partnership. The Partner brings customers and distribution; every regulated activity stays with Belmoney under its NBB licence. The Partner never needs payment authorisation and does not act as Belmoney's PSD2 agent.</p>
+  </div>
+  <div class="split">
+    <div class="box you">
+      <span class="eyebrow">The Partner</span>
+      <h3>Owns the customer relationship</h3>
+      <ul>
+        <li>Brand, app or web front-end (or Belmoney's White Label App)</li>
+        <li>Customer acquisition and marketing</li>
+        <li>API integration of pay-in and payout flows</li>
+        <li>Customer KYC through an approved KYC provider</li>
+        <li>Choice of corridors and pricing to end customers</li>
+      </ul>
+    </div>
+    <div class="box us">
+      <span class="eyebrow">Belmoney</span>
+      <h3>Runs the regulated core</h3>
+      <ul>
+        <li>Customer onboarding approval and transaction execution</li>
+        <li>AML/CFT monitoring and sanctions screening on every transfer</li>
+        <li>Safeguarding of customer funds</li>
+        <li>Card acquiring, A2A open banking, Apple Pay and Google Pay</li>
+        <li>FX execution and payout through the global partner network</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section class="dark" aria-labelledby="flow">
+  <div class="head">
+    <span class="eyebrow">Transaction lifecycle</span>
+    <h2 id="flow">How one transfer moves</h2>
+    <p class="lead">From a sender in Europe to a beneficiary abroad. Settlement to the Partner is in EUR; customer funds never pass through the Partner.</p>
+  </div>
+  <div class="flow">
+    <div class="step"><span class="eyebrow">1 · Sender</span><h3>EEA customer</h3><p>Starts a transfer in the Partner's branded app.</p></div>
+    <div class="step"><span class="eyebrow">2 · Pay-in</span><h3>Card or A2A</h3><p>EEA debit or credit card, open banking, Apple Pay, Google Pay.</p></div>
+    <div class="step core"><span class="eyebrow">3 · Belmoney</span><h3>Compliance &amp; FX</h3><p>KYC check, AML and sanctions screening, FX conversion, safeguarding.</p></div>
+    <div class="step"><span class="eyebrow">4 · Payout</span><h3>Local rails</h3><p>Bank account, mobile wallet or cash pick-up through local payout partners.</p></div>
+    <div class="step"><span class="eyebrow">5 · Beneficiary</span><h3>Funds received</h3><p>Status flows back via API: Processing, Paid or Cancelled.</p></div>
+  </div>
+</section>
+
+<!-- API -->
+<section class="light" aria-labelledby="api">
+  <div class="head">
+    <span class="eyebrow">Integration</span>
+    <h2 id="api">One API, two flows</h2>
+    <p class="lead">Belmoney provides full API documentation and sandbox credentials from day one. The Partner's developers integrate two sets of calls.</p>
+  </div>
+  <div class="api">
+    <div class="box you">
+      <span class="eyebrow">Incoming flow</span>
+      <h3>Collect the funds</h3>
+      <div class="calls"><code>PayerNetworkList</code><code>PreRegister</code><code>Confirm</code></div>
+      <p class="note">Lists available pay-in methods, registers the transaction, confirms payment.</p>
+    </div>
+    <div class="box you">
+      <span class="eyebrow">Outgoing flow</span>
+      <h3>Deliver the payout</h3>
+      <div class="calls"><code>NewList</code><code>New</code><code>Processing</code><code>Paid</code><code>Cancel</code></div>
+      <p class="note">Creates payout orders and tracks each one to its final status.</p>
+    </div>
+    <div class="box us">
+      <span class="eyebrow">Option</span>
+      <h3>White Label App</h3>
+      <p>No front-end yet? Belmoney delivers a ready-to-brand remittance app, maintained for a monthly Application Maintenance Fee.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ONBOARDING -->
+<section class="light" aria-labelledby="onb">
+  <div class="head">
+    <span class="eyebrow">Onboarding · 8 phases · dedicated Account Executive</span>
+    <h2 id="onb">From signature to go-live in 60 days</h2>
+    <p class="lead">The clock starts on the Effective Date: the day Belmoney confirms receipt of the Upfront Fee. Projects coordinate in a shared ClickUp channel.</p>
+  </div>
+  <div class="timeline">
+    <div class="ms">
+      <span class="when">Phases 1–2 · +8 business days</span>
+      <h3>Contract &amp; kick-off</h3>
+      <ul><li>Service Order signed, Upfront Fee paid</li><li>MSA and Payout Service Agreement executed</li><li>Corridors Sheet completed</li><li>Due diligence submitted</li></ul>
+      <span class="owner">Both parties</span>
+    </div>
+    <div class="ms">
+      <span class="when">Phases 3–4 · by day 30</span>
+      <h3>MID &amp; API integration</h3>
+      <ul><li>Merchant ID approved</li><li>IT and treasury configured</li><li>Incoming and outgoing flows integrated</li><li>KYC provider approved</li></ul>
+      <span class="owner">Partner + Belmoney IT</span>
+    </div>
+    <div class="ms">
+      <span class="when">Phases 5–6 · after phase 4</span>
+      <h3>Gateway &amp; homologation</h3>
+      <ul><li>Payment gateway and A2A live</li><li>Homologation meeting held</li><li>Compliance homologation call</li><li>All-department sign-off</li></ul>
+      <span class="owner">Both parties</span>
+    </div>
+    <div class="ms last">
+      <span class="when">Phases 7–8 · by day 60</span>
+      <h3>Go-live &amp; handover</h3>
+      <ul><li>Compliance training delivered</li><li>Live API credentials issued</li><li>Settlement limit opened, test transactions validated</li><li>Handover to Account Manager</li></ul>
+      <span class="owner">Belmoney</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="light" aria-labelledby="price">
+  <div class="head">
+    <span class="eyebrow">Commercial model</span>
+    <h2 id="price">Transparent pricing that scales with volume</h2>
+    <p class="lead">Three layers: a one-off onboarding fee, a fixed monthly platform fee, and a per-transaction fee that falls as volume grows. Card costs are passed through at cost.</p>
+  </div>
+  <div class="fees">
+    <div class="fee"><span>One-off</span><b>Upfront fee</b><span>Base €6,000 for setup, project management, compliance and architecture, plus components for volume, number of non-SEPA corridors and corridor regulatory risk.</span></div>
+    <div class="fee"><span>Monthly</span><b class="num">€990</b><span>Platform fee, first due 30 days after go-live. Rises to €1,990 if go-live slips past day 60 because of the Partner.</span></div>
+    <div class="fee"><span>Per transaction</span><b class="num">€1.20 → €0.70</b><span>Flat fee on each paid transfer, all corridors, stepping down through six tiers.</span></div>
+    <div class="fee"><span>Contract</span><b class="num">24 months</b><span>Initial term, then 12-month renewals unless notice is given 3 months ahead.</span></div>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Tier</th><th>Months after go-live</th><th class="r">Committed volume / month</th><th class="r">Price / transaction</th><th class="r">Revenue floor / month</th><th class="r">vs T1</th></tr></thead>
+      <tbody>
+        <tr><td>T1 · Ramp-up</td><td>1–2</td><td class="r">No commitment</td><td class="r">€1.20</td><td class="r">Pay-per-use</td><td class="r">—</td></tr>
+        <tr><td>T2</td><td>3–4</td><td class="r">1,000</td><td class="r">€1.10</td><td class="r">€1,100</td><td class="r">−8%</td></tr>
+        <tr><td>T3</td><td>5–6</td><td class="r">5,000</td><td class="r">€1.00</td><td class="r">€5,000</td><td class="r">−17%</td></tr>
+        <tr><td>T4</td><td>7–10</td><td class="r">10,000</td><td class="r">€0.90</td><td class="r">€9,000</td><td class="r">−25%</td></tr>
+        <tr><td>T5</td><td>11–12</td><td class="r">20,000</td><td class="r">€0.80</td><td class="r">€16,000</td><td class="r">−33%</td></tr>
+        <tr class="hl"><td>T6 · Steady state</td><td>13+</td><td class="r">40,000</td><td class="r">€0.70</td><td class="r">€28,000</td><td class="r">−42%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">A Partner above its committed volume can move up a tier from the next calendar month. Shortfalls against the commitment are invoiced at the tier price. Indicative reference schedule; binding terms are those of each signed Service Order.</p>
+</section>
+
+<!-- CALCULATOR -->
+<section class="dark" aria-labelledby="calc">
+  <div class="head">
+    <span class="eyebrow">Cost per transfer</span>
+    <h2 id="calc">What one card-funded transfer costs</h2>
+    <p class="lead">Fixed components plus percentage components that scale with the amount sent. Change the inputs to see the full stack.</p>
+  </div>
+  <div class="calc">
+    <div class="inputs">
+      <label for="atv">Average transaction value (€)
+        <input id="atv" type="number" min="1" max="10000" step="1" value="50" inputmode="decimal">
+      </label>
+      <label for="tier">Pricing tier
+        <select id="tier">
+          <option value="1.20" selected>T1 · Ramp-up · €1.20</option>
+          <option value="1.10">T2 · €1.10</option>
+          <option value="1.00">T3 · €1.00</option>
+          <option value="0.90">T4 · €0.90</option>
+          <option value="0.80">T5 · €0.80</option>
+          <option value="0.70">T6 · Steady state · €0.70</option>
+        </select>
+      </label>
+      <div style="display:grid;gap:6px">
+        <span style="font-family:var(--f-title);font-weight:600;font-size:14px">Card type</span>
+        <div class="seg" role="group" aria-label="Card type">
+          <button type="button" id="debit" aria-pressed="true">Consumer debit</button>
+          <button type="button" id="credit" aria-pressed="false">Consumer credit</button>
+        </div>
+      </div>
+      <p class="note">EEA-issued consumer cards only, acquired by Belmoney's EU entity, so regulated interchange caps apply: 0.20% debit, 0.30% credit.</p>
+    </div>
+    <div class="out" aria-live="polite">
+      <div class="line"><span>Belmoney per-transaction fee</span><span id="o-fee">€1.200</span></div>
+      <div class="line"><span>AML / sanctions screening</span><span>€0.160</span></div>
+      <div class="line"><span>Payment processing / gateway</span><span>€0.180</span></div>
+      <div class="line"><span>Acquiring margin · 0.15%</span><span id="o-acq">€0.075</span></div>
+      <div class="line"><span>Scheme fees · at cost, est. 0.05%</span><span id="o-sch">€0.025</span></div>
+      <div class="line"><span id="o-ic-l">Interchange · at cost, 0.20% cap</span><span id="o-ic">€0.100</span></div>
+      <div class="total"><span>Total per transfer</span><b id="o-tot">€1.74</b></div>
+      <p class="note" id="o-pct">= 3.48% of the amount sent</p>
+    </div>
+  </div>
+  <p class="note">Chargebacks: €20 per case plus any scheme penalties passed through. A rolling reserve covers chargeback exposure. Payout-side corridor costs are quoted separately.</p>
+</section>
+
+<!-- CORRIDORS -->
+<section class="light" aria-labelledby="corr">
+  <div class="head">
+    <span class="eyebrow">Coverage</span>
+    <h2 id="corr">Corridors, graded by risk</h2>
+    <p class="lead">Every destination country carries a risk tier. The tier sets the compliance work at onboarding and the due diligence applied to each transfer.</p>
+  </div>
+  <div class="tiers">
+    <div class="tier"><div class="t"><b>T1 · EEA</b><span class="num">30</span></div><p>All EU states plus Iceland, Liechtenstein, Norway. Lowest friction, SEPA rails.</p></div>
+    <div class="tier"><div class="t"><b>T2 · Low</b><span class="num">18</span></div><p>UK, USA, Canada, Switzerland, UAE, Singapore, Japan, Australia and more.</p></div>
+    <div class="tier"><div class="t"><b>T3 · Medium</b><span class="num">54</span></div><p>India, Brazil, Mexico, Morocco, Nigeria, Turkey, Nepal, South Africa and more.</p></div>
+    <div class="tier"><div class="t"><b>T4 · High</b><span class="num">24</span></div><p>Philippines, Senegal, Vietnam, Ivory Coast and others, with enhanced due diligence.</p></div>
+    <div class="tier"><div class="t"><b>T5 · Very high</b><span class="num">16</span></div><p>Sudan, Somalia, Iraq, Zimbabwe and others. Assessed case by case.</p></div>
+  </div>
+  <div class="blocked"><strong>Not served:</strong> North Korea, Iran, Myanmar, Cuba, Syria, Russia, Venezuela, Belarus. No processing and no pricing for prohibited jurisdictions.</div>
+</section>
+
+<!-- TEAM -->
+<section class="dark" aria-labelledby="team">
+  <div class="head">
+    <span class="eyebrow">Why Belmoney · operating since 2013 · 61 people</span>
+    <h2 id="team">A licensed operator behind your brand</h2>
+    <p class="lead">Belmoney S.A. is a Belgian payment institution (BE 0540745997), Avenue Louise 54, Brussels. The team has run remittance operations for decades.</p>
+  </div>
+  <div class="team">
+    <div class="person"><span class="role">CEO &amp; Founder</span><b>Bruno Pedras</b><p>17+ years. Founded Belmoney in 2013 and BT Money Transfer.</p></div>
+    <div class="person"><span class="role">CSO</span><b>Edouard Bondue</b><p>13+ years. Scaled RaaS sales to 200+ deployments in a previous role.</p></div>
+    <div class="person"><span class="role">COO</span><b>Antonio Costa</b><p>23+ years. Product, delivery and organisation at Belmoney since 2009.</p></div>
+    <div class="person"><span class="role">CPO · Global network</span><b>Pablo F. Torres</b><p>34+ years. Payout partners, trading desk and FX; ex-Small World.</p></div>
+    <div class="person"><span class="role">CFO</span><b>Arthur Figueiró</b><p>15+ years. Ex-Sits Capital and EY corporate finance.</p></div>
+    <div class="person"><span class="role">Executive Director · Risk</span><b>Szandra Csadi</b><p>18+ years. Leads risk and compliance; former CFO and CCO.</p></div>
+  </div>
+</section>
+
+<section class="cta-band" aria-label="Next step">
+  <div class="cta">
+    <p>Ready to scope your corridors? Your Belmoney Account Executive builds the Service Order with you.</p>
+    <span class="badge" style="background:var(--bm-teal);color:var(--bm-off);font-size:14px;padding:10px 20px">Next step: Corridors Sheet</span>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script>
+(function () {
+  var atv = document.getElementById('atv');
+  var tier = document.getElementById('tier');
+  var bDebit = document.getElementById('debit');
+  var bCredit = document.getElementById('credit');
+  var ic = 0.002;
+  function eur(n, d) { return '€' + n.toFixed(d); }
+  function render() {
+    var a = Math.max(0, parseFloat(atv.value) || 0);
+    var fee = parseFloat(tier.value);
+    var acq = a * 0.0015, sch = a * 0.0005, icv = a * ic;
+    var tot = fee + 0.16 + 0.18 + acq + sch + icv;
+    document.getElementById('o-fee').textContent = eur(fee, 3);
+    document.getElementById('o-acq').textContent = eur(acq, 3);
+    document.getElementById('o-sch').textContent = eur(sch, 3);
+    document.getElementById('o-ic').textContent = eur(icv, 3);
+    document.getElementById('o-ic-l').textContent = 'Interchange · at cost, ' + (ic * 100).toFixed(2) + '% cap';
+    document.getElementById('o-tot').textContent = eur(tot, 2);
+    document.getElementById('o-pct').textContent = a > 0 ? '= ' + (tot / a * 100).toFixed(2) + '% of the amount sent' : 'Enter an amount';
+  }
+  function setCard(credit) {
+    ic = credit ? 0.003 : 0.002;
+    bDebit.setAttribute('aria-pressed', String(!credit));
+    bCredit.setAttribute('aria-pressed', String(credit));
+    render();
+  }
+  atv.addEventListener('input', render);
+  tier.addEventListener('change', render);
+  bDebit.addEventListener('click', function () { setCard(false); });
+  bCredit.addEventListener('click', function () { setCard(true); });
+  render();
+})();
+</script>
